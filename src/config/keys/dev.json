@@ -1,0 +1,4 @@
+{
+    "mongoURI": "mongodb+srv://shivamgoyal1506:testMongodb@cluster0-snidn.mongodb.net/wtd?retryWrites=true&w=majority",
+    "jwtSecret": "zia213tyfs5uizbfjk5434sx53n4es1d2q6+rpo2a3q6cz94j515ffsfsmbnzxzspq12"
+}
