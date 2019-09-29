@@ -1,0 +1,37 @@
+{
+  "name": "wtd_server",
+  "version": "1.0.0",
+  "description": "Server sided code for what to do,",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./build/index.js",
+    "tsc": "tsc",
+    "dev": "ts-node-dev --respawn --transpileOnly ./index.ts",
+    "prod": "tsc && node ./build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/wtd.net.in/wtd_server.git"
+  },
+  "author": "yashbth",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/wtd.net.in/wtd_server/issues"
+  },
+  "homepage": "https://gitlab.com/wtd.net.in/wtd_server#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.7.1",
+    "ts-node-dev": "^1.0.0-pre.43",
+    "typescript": "^3.6.3"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/express": "^4.17.1",
+    "@types/jsonwebtoken": "^8.3.4",
+    "@types/mongoose": "^5.5.18"
+  }
+}
