@@ -1,14 +1,15 @@
 import JWT = require('jsonwebtoken');
 import express = require('express');
 import bcrypt = require('bcryptjs');
+import validator = require('validator');
+import mailer = require('../config/mailer.conf');
 
 import User = require('../models/user');
 import config = require('../config/convict.conf');
 import { authRequest } from '../helpers/req';
-import { validateEmail } from '../helpers/validators';
 
 
-export function authEnsureLogin(req: authRequest, res: express.Response) {
+export function authEnsureLogin(req: authRequest, res: express.Response, next: express.NextFunction) {
     const token = req.headers['x-auth'];
     if (!token) {
         res.status(401).json({
@@ -26,9 +27,13 @@ export function authEnsureLogin(req: authRequest, res: express.Response) {
         }
         req.userID = decoded.id;
         console.log(req.userID);
-        res.status(200).json({
-            Ok: true
-        });
+        next();
+    });
+}
+
+export function authSuccess(req: authRequest, res: express.Response) {
+    res.status(200).json({
+        Ok: true
     });
 }
 
@@ -44,7 +49,7 @@ export async function authLogin(req: authRequest, res: express.Response) {
 
         let user: any;
 
-        if (validateEmail(uId)) {
+        if (validator.isEmail(uId)) {
             user = await User.findOne({ email: uId });
         } else {
             user = await User.findOne({ userName: uId });
@@ -67,10 +72,11 @@ export async function authLogin(req: authRequest, res: express.Response) {
             res.status(200).json({ Ok: true });
         });
     } catch (err) {
-        // console.log(err);
+        console.log(err);
         res.status(403).json({ Ok: false });
     }
 }
+
 /*
  * For below two functions :-
  * @args: userName or email
@@ -78,13 +84,14 @@ export async function authLogin(req: authRequest, res: express.Response) {
  *
  */
 async function checkUserName(userName: string) {
-    const user = await User.find({ userName });
+    const user = await User.find({ userName: userName.toLowerCase() });
     if (!user || user.length < 1) { return true; }
     return false;
 }
 
 async function checkEmail(email: string) {
-    const user = await User.find({ email });
+    const nEmail = validator.normalizeEmail(email, {all_lowercase: true, gmail_convert_googlemaildotcom: true});
+    const user = await User.find({ email: nEmail });
     if (!user || user.length < 1) { return true; }
     return false;
 }
@@ -106,7 +113,7 @@ export async function authCheckUname(req: authRequest, res: express.Response) {
 export async function authCheckEmail(req: authRequest, res: express.Response) {
     try {
         const email = req.body.email;
-        if (!email) {
+        if (!email || !validator.isEmail(email)) {
             res.status(403).json({ Ok: false });
             return;
         }
@@ -135,7 +142,7 @@ export async function authRegister(req: authRequest, res: express.Response) {
             return;
         }
 
-        if (!validateEmail(email)) {
+        if (!validator.isEmail(email)) {
             res.status(200).json({ Ok: false, error: 'Not a valid email address!' });
             return;
         }
@@ -161,10 +168,11 @@ export async function authRegister(req: authRequest, res: express.Response) {
                 if (err2) {
                     res.status(501).json({ Ok: false, error: 'Internal Error!' });
                 }
+                const nEmail = validator.normalizeEmail(email, {all_lowercase: true, gmail_convert_googlemaildotcom: true});
                 const newUser = {
                     name,
-                    userName,
-                    email,
+                    userName: userName.toLowerCase(),
+                    email: nEmail,
                     password: hashedPass,
                     regDate: new Date()
                 };

@@ -9,7 +9,7 @@ import mongooseConfig = require('./config/mongoose.conf');
 
 // Routers
 import authRouter = require('./routes/auth');
-
+import userRouter = require('./routes/user');
 
 const app = express();
 app.disable('x-powered-by');
@@ -28,7 +28,7 @@ app.use((req, res, next) => {
     }
     res.setHeader(
         'Access-Control-Allow-Headers',
-        'Content-Type, Authorization, x-auth'
+        'Content-Type, x-auth'
     );
     res.setHeader(
         'Access-Control-Expose-Headers',
@@ -42,5 +42,6 @@ mongooseConfig(mongoose);
 
 // Load routes
 app.use('/auth', authRouter);
+app.use('/user', userRouter);
 
 export = app;

@@ -19,6 +19,18 @@ const config = convict({
     format: String,
     default: 'null',
     env: 'MONGO_URI'
+  },
+  mailAuth: {
+    user: {
+      doc: 'Mail authentication user',
+      format: String,
+      default: 'null'
+    },
+    pass: {
+      doc: 'Mail authentication password',
+      format: String,
+      default: 'null'
+    }
   }
 });
 

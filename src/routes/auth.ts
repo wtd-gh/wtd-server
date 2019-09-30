@@ -1,11 +1,14 @@
 import express = require('express');
-import { authEnsureLogin, authLogin, authRegister, authCheckEmail, authCheckUname, authHandleError } from '../controllers/auth';
+import {
+    authEnsureLogin, authLogin, authSuccess, authRegister, authCheckEmail, authCheckUname, authHandleError
+} from '../controllers/auth';
 
 
 const router = express.Router();
 
 router.route('/islogin').post(
     authEnsureLogin,
+    authSuccess,
     authHandleError
 );
 
