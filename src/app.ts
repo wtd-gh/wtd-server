@@ -28,7 +28,7 @@ app.use((req, res, next) => {
     }
     res.setHeader(
         'Access-Control-Allow-Headers',
-        'Content-Type, x-auth'
+        'Content-Type, x-auth-token, x-auth'
     );
     res.setHeader(
         'Access-Control-Expose-Headers',

@@ -81,7 +81,6 @@ export async function authLogin(req: authRequest, res: express.Response) {
  * For below two functions :-
  * @args: userName or email
  * @return: true if value 'not' present in database, false if value present in database
- *
  */
 async function checkUserName(userName: string) {
     const user = await User.find({ userName: userName.toLowerCase() });
@@ -163,12 +162,16 @@ export async function authRegister(req: authRequest, res: express.Response) {
         await bcrypt.genSalt(12, (err, salt) => {
             if (err) {
                 res.status(501).json({ Ok: false, error: 'Internal Error!' });
+                return;
             }
             bcrypt.hash(password, salt, (err2, hashedPass) => {
                 if (err2) {
                     res.status(501).json({ Ok: false, error: 'Internal Error!' });
+                    return;
                 }
-                const nEmail = validator.normalizeEmail(email, {all_lowercase: true, gmail_convert_googlemaildotcom: true});
+                const nEmail = validator.normalizeEmail(email, {
+                    all_lowercase: true, gmail_convert_googlemaildotcom: true
+                });
                 const newUser = {
                     name,
                     userName: userName.toLowerCase(),
