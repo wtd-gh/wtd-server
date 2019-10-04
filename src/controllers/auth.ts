@@ -13,15 +13,16 @@ export function authEnsureLogin(req: authRequest, res: express.Response, next: e
     const token = req.headers['x-auth'];
     if (!token) {
         res.status(401).json({
-            Error: 'User not authenticated',
-            ErrorDescription: 'No cookie found on headers'
+            ok: false,
+            error: 'No cookie found on headers'
         });
         return;
     }
     JWT.verify(token.toString(), config.get('jwtSecret'), (error: any, decoded: any) => {
         if (error || !decoded) {
             res.status(405).json({
-                Error: 'Cookie invalid'
+                ok: false,
+                error: 'Cookie invalid'
             });
             return;
         }
@@ -33,7 +34,7 @@ export function authEnsureLogin(req: authRequest, res: express.Response, next: e
 
 export function authSuccess(req: authRequest, res: express.Response) {
     res.status(200).json({
-        Ok: true
+        ok: true
     });
 }
 
@@ -43,7 +44,7 @@ export async function authLogin(req: authRequest, res: express.Response) {
         const pass = req.body.pass;
 
         if (!uId || !pass) {
-            res.status(403).json({ Ok: false });
+            res.status(403).json({ ok: false, error: 'The username or email address doesn\'t match any account' });
             return;
         }
 
@@ -56,7 +57,7 @@ export async function authLogin(req: authRequest, res: express.Response) {
         }
 
         if (!user) {
-            res.status(403).json({ Ok: false });
+            res.status(200).json({ ok: false, error: 'The username or email address doesn\'t match any account' });
             return;
         }
 
@@ -64,16 +65,16 @@ export async function authLogin(req: authRequest, res: express.Response) {
 
         bcrypt.compare(pass, hashedPass).then((resp) => {
             if (resp === false) {
-                res.status(403).json({ Ok: false });
+                res.status(200).json({ ok: false, error: 'The password you entered is incorrect!' });
                 return;
             }
             const token = JWT.sign({ id: user._id }, config.get('jwtSecret'));
             res.setHeader('x-auth', token);
-            res.status(200).json({ Ok: true });
+            res.status(200).json({ ok: true });
         });
     } catch (err) {
         console.log(err);
-        res.status(403).json({ Ok: false });
+        res.status(501).json({ ok: false });
     }
 }
 
@@ -89,7 +90,7 @@ async function checkUserName(userName: string) {
 }
 
 async function checkEmail(email: string) {
-    const nEmail = validator.normalizeEmail(email, {all_lowercase: true, gmail_convert_googlemaildotcom: true});
+    const nEmail = validator.normalizeEmail(email, { all_lowercase: true, gmail_convert_googlemaildotcom: true });
     const user = await User.find({ email: nEmail });
     if (!user || user.length < 1) { return true; }
     return false;
@@ -99,13 +100,13 @@ export async function authCheckUname(req: authRequest, res: express.Response) {
     try {
         const userName = req.body.uName;
         if (!userName) {
-            res.status(403).json({ Ok: false });
+            res.status(403).json({ ok: false, error: 'Username ' + userName + ' is not available!' });
             return;
         }
         const isAvail = await checkUserName(userName);
-        res.status(200).json({ Ok: isAvail });
+        res.status(200).json({ ok: isAvail });
     } catch (error) {
-        res.status(403).json({ Ok: false });
+        res.status(501).json({ ok: false });
     }
 }
 
@@ -113,13 +114,13 @@ export async function authCheckEmail(req: authRequest, res: express.Response) {
     try {
         const email = req.body.email;
         if (!email || !validator.isEmail(email)) {
-            res.status(403).json({ Ok: false });
+            res.status(403).json({ ok: false, error: 'WtD account with the email address already exist, please login!' });
             return;
         }
         const isAvail = await checkEmail(email);
-        res.status(200).json({ Ok: isAvail });
+        res.status(200).json({ ok: isAvail });
     } catch (error) {
-        res.status(403).json({ Ok: false });
+        res.status(403).json({ ok: false });
     }
 }
 
@@ -132,41 +133,41 @@ export async function authRegister(req: authRequest, res: express.Response) {
         const password = req.body.pass;
 
         if (!name || !email || !userName || !password) {
-            res.status(403).json({ Ok: false });
+            res.status(403).json({ ok: false });
             return;
         }
 
         if ((name.length + email.length + userName.length + password.length) > 2000) {
-            res.status(403).json({ Ok: false, error: 'Too long to store!' });
+            res.status(403).json({ ok: false, error: 'Too long to store!' });
             return;
         }
 
         if (!validator.isEmail(email)) {
-            res.status(200).json({ Ok: false, error: 'Not a valid email address!' });
+            res.status(200).json({ ok: false, error: 'Not a valid email address!' });
             return;
         }
 
         const isUnameValid = await checkUserName(userName);
         if (!isUnameValid) {
-            res.status(200).json({ Ok: false, error: 'Username already taken!' });
+            res.status(200).json({ ok: false, error: 'Username already taken!' });
             return;
         }
 
         const isEmailValid = await checkEmail(email);
         if (!isEmailValid) {
-            res.status(200).json({ Ok: false, error: 'Email address already exist, please login!' });
+            res.status(200).json({ ok: false, error: 'Email address already exist, please login!' });
             return;
         }
 
 
         await bcrypt.genSalt(12, (err, salt) => {
             if (err) {
-                res.status(501).json({ Ok: false, error: 'Internal Error!' });
+                res.status(501).json({ ok: false, error: 'Internal Error!' });
                 return;
             }
             bcrypt.hash(password, salt, (err2, hashedPass) => {
                 if (err2) {
-                    res.status(501).json({ Ok: false, error: 'Internal Error!' });
+                    res.status(501).json({ ok: false, error: 'Internal Error!' });
                     return;
                 }
                 const nEmail = validator.normalizeEmail(email, {
@@ -181,14 +182,14 @@ export async function authRegister(req: authRequest, res: express.Response) {
                 };
                 new User(newUser).save().then(user => {
                     return res.status(200).json({
-                        Ok: true
+                        ok: true
                     });
                 });
             });
         });
     } catch (error) {
         console.log(error);
-        res.status(403).json({ Ok: false });
+        res.status(403).json({ ok: false });
     }
 }
 
