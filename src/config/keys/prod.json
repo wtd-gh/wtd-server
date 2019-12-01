@@ -1,0 +1,8 @@
+{
+    "mongoURI": "mongodb://wtdDBAdmin:Adm1nKIPa55phrase@localhost:13377/wtd",
+    "jwtSecret": "zia213tyfs5uizbfjk5434sx53n4es1d2q6+rpo2a3q6cz94j515ffsfsmbnzxzspq12",
+    "mailAuth": {
+        "user": "user.wtd@outlook.com",
+        "pass": "WTD@Wha1t0d0"
+    }
+}

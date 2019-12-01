@@ -6,9 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon ./build/index.js",
-    "tsc": "tsc",
+    "tsc": "tsc && cp -rf ./src/config/keys ./build/src/config/",
     "dev": "ts-node-dev --respawn --transpileOnly ./index.ts",
-    "prod": "tsc && node ./build/index.js"
+    "prod": "tsc && cp -rf ./src/config/keys ./build/src/config/ && node ./build/index.js"
   },
   "repository": {
     "type": "git",

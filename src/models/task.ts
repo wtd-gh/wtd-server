@@ -7,9 +7,7 @@ const taskSchema = new mongoose.Schema({
     taskDeadline: { type: Date, required: false },
     taskQuanta: { type: Number, required: false },
     taskWorkHrs: { type: Number, required: false },
-
-    taskRepeat: { type: Boolean, required: false },  // If generated from repeat task
-    taskRepId: { type: mongoose.Schema.Types.ObjectId, ref: 'repeatTask' , required: false }
+    taskInitWorkHrs: { type: Number, required: false }
 });
 
 taskSchema.set('toJSON', { getters: true, virtuals: true });

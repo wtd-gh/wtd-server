@@ -8,9 +8,6 @@ const userSchema = new mongoose.Schema({
     regDate: { type: Date, required: true },
     tasks: [{
         taskId: { type: mongoose.Schema.Types.ObjectId, ref: 'task' }
-    }],
-    repeatTasks: [{
-        repeatTaskId: {type: mongoose.Schema.Types.ObjectId, ref: 'repeatTask' }
     }]
 });
 

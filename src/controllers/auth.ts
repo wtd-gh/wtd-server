@@ -70,7 +70,7 @@ export async function authLogin(req: authRequest, res: express.Response) {
             }
             const token = JWT.sign({ id: user._id }, config.get('jwtSecret'));
             res.setHeader('x-auth', token);
-            res.status(200).json({ ok: true });
+            res.status(200).json({ ok: true, name: user.name });
         });
     } catch (err) {
         console.log(err);

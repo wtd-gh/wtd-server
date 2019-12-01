@@ -3,7 +3,7 @@ import express = require('express');
 import { handleServerError } from '../helpers/req';
 import { authEnsureLogin } from '../controllers/auth';
 import {
-    getAllTasks, addTask, addRepTask, decreaseWorkHrs
+    getAllTasks, addTask, decreaseWorkHrs, deleteTask, tellTodo
 } from '../controllers/user';
 
 
@@ -21,11 +21,18 @@ router.route('/addtask').post(
     handleServerError
 );
 
-router.route('/addrepeattask').post(
+router.route('/deletetask').post(
     authEnsureLogin,
-    addRepTask,
+    deleteTask,
     handleServerError
 );
+
+router.route('/whattodo').post(
+    authEnsureLogin,
+    tellTodo,
+    handleServerError
+);
+
 
 router.route('/decreasework').post(
     authEnsureLogin,
