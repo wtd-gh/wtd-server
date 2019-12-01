@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon ./build/index.js",
     "tsc": "tsc && cp -rf ./src/config/keys ./build/src/config/",
+    "tsc2": "tsc",
     "dev": "ts-node-dev --respawn --transpileOnly ./index.ts",
     "prod": "tsc && cp -rf ./src/config/keys ./build/src/config/ && node ./build/index.js"
   },
