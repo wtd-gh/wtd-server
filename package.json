@@ -1,7 +1,7 @@
 {
-  
+
   "name": "wtd_server",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Server sided code for what to do,",
   "main": "index.js",
   "scripts": {

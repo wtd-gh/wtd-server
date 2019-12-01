@@ -4,7 +4,7 @@
 GIT_SLUG="wtd.net.in/wtd_server"
 GIT_TOKEN="8kcDJeNjwjxBHztdq1tx"
 GIT_BRANCH="master"
-GIT_CLONE_DIR="temp-server"
+GIT_CLONE_DIR="temp_server"
 
 TARGET_DIR="/var/www/wtd_server"
 # ------------------------------------------------------------>
@@ -15,7 +15,7 @@ git clone --depth=1 --branch=${GIT_BRANCH} https://gitlab-ci-token:${GIT_TOKEN}@
 if [ $? != 0 ]; then exit $?; fi
 
 # Sync with the latest
-sudo rsync -r ${GIT_CLONE_DIR}/* ${TARGET_DIR}/
+sudo rsync -r ${GIT_CLONE_DIR}/* ${TARGET_DIR}/ --exclude=.git
 
 
 # Build @latest
@@ -23,7 +23,8 @@ sudo rsync -r ${GIT_CLONE_DIR}/* ${TARGET_DIR}/
 cd ${TARGET_DIR}
 sudo npm i
 sudo rm -rf build
-sudo npm run tsc
+sudo npm run tsc2
+sudo cp -rf ./src/config/keys ./build/src/config/
 if [ $? != 0 ]; then exit $?; fi
 sudo chmod +x ./build/index.js
 
