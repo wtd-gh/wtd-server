@@ -1,0 +1,18 @@
+stages:
+  - deploy
+
+# ========================================================================
+
+deploy:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - which ssh-agent || apk add openssh-client
+    - which ssh-agent
+    - eval $(ssh-agent -s)
+    - echo "$WTD_AWS_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan ec2-54-147-120-75.compute-1.amazonaws.com >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - ssh ubuntu@ec2-54-147-120-75.compute-1.amazonaws.com './deploy_server.sh'
