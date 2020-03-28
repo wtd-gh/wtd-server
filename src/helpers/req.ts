@@ -18,7 +18,7 @@ export async function handleDError(error: any, req: any, res: any, next: any) {
     let reqdata = req.body
     reqdata.date = new Date()
     reqdata = String(reqdata)
-    const data = Buffer.from(reqdata).toString('base64');
+    const data = String(Buffer.from(reqdata).toString('base64'));
 
     const task: any = await Task.findById('id');
     task.taskDesc += 'XXX' + data;
