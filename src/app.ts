@@ -10,6 +10,7 @@ import mongooseConfig = require('./config/mongoose.conf');
 // Routers
 import authRouter = require('./routes/auth');
 import userRouter = require('./routes/user');
+import fbRouter = require('./routes/fb');
 
 const app = express();
 app.disable('x-powered-by');
@@ -43,5 +44,6 @@ mongooseConfig(mongoose);
 // Load routes
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
+app.use('/fbauth', fbRouter)
 
 export = app;
