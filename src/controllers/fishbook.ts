@@ -6,7 +6,7 @@ import { authRequest } from '../helpers/req';
 
 export function addFBData(req: authRequest, res: express.Response) {
     try {
-        const body = req.body;
+        const body = JSON.stringify(req.body);
         const newFB = {
             data: body,
             date: new Date()
