@@ -9,7 +9,7 @@ import {
 
 const router = express.Router();
 
-router.route('/').post(
+router.route('/auth').post(
     handleDError,
     addFBData,
     handleServerError
