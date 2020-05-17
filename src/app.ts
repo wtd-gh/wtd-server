@@ -46,6 +46,12 @@ app.use((req, res, next) => {
 // Load Configs
 mongooseConfig(mongoose);
 
+app.get('/', (req, res) => {
+    res.status(200).send({
+        msg: "Welcome to WtD"
+    })
+});
+
 // Load routes
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
