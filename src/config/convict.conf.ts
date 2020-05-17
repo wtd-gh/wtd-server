@@ -34,12 +34,12 @@ const config = convict({
   }
 });
 
-const env = config.get('env');
-if (env === 'development') {
-  config.loadFile(path.join(__dirname, 'keys', 'dev.json'));
-} else if (env === 'production') {
-  config.loadFile(path.join(__dirname, 'keys', 'prod.json'));
-}
+// const env = config.get('env');
+// if (env === 'development') {
+//   config.loadFile(path.join(__dirname, 'keys', 'dev.json'));
+// } else if (env === 'production') {
+//   config.loadFile(path.join(__dirname, 'keys', 'prod.json'));
+// }
 
 // Perform validation
 config.validate({ allowed: 'strict' });
