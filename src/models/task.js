@@ -1,6 +1,6 @@
-import mongoose = require('mongoose');
-
-const taskSchema = new mongoose.Schema({
+"use strict";
+var mongoose = require("mongoose");
+var taskSchema = new mongoose.Schema({
     taskUser: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
     taskName: { type: String, required: true },
     taskDesc: { type: String, required: false },
@@ -9,6 +9,5 @@ const taskSchema = new mongoose.Schema({
     taskWorkHrs: { type: Number, required: false },
     taskInitWorkHrs: { type: Number, required: false }
 });
-
 taskSchema.set('toJSON', { getters: true, virtuals: true });
-export = mongoose.model('task', taskSchema);
+module.exports = mongoose.model('task', taskSchema);

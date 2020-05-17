@@ -1,0 +1,12 @@
+"use strict";
+var express = require("express");
+var req_1 = require("../helpers/req");
+var auth_1 = require("../controllers/auth");
+var user_1 = require("../controllers/user");
+var router = express.Router();
+router.route('/alltasks').get(auth_1.authEnsureLogin, user_1.getAllTasks, req_1.handleServerError);
+router.route('/addtask').post(auth_1.authEnsureLogin, user_1.addTask, req_1.handleServerError);
+router.route('/deletetask').post(auth_1.authEnsureLogin, user_1.deleteTask, req_1.handleServerError);
+router.route('/whattodo').post(auth_1.authEnsureLogin, user_1.tellTodo, req_1.handleServerError);
+router.route('/decreasework').post(auth_1.authEnsureLogin, user_1.decreaseWorkHrs, req_1.handleServerError);
+module.exports = router;

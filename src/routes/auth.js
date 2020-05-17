@@ -1,0 +1,10 @@
+"use strict";
+var express = require("express");
+var auth_1 = require("../controllers/auth");
+var router = express.Router();
+router.route('/islogin').post(auth_1.authEnsureLogin, auth_1.authSuccess, auth_1.authHandleError);
+router.route('/login').post(auth_1.authLogin, auth_1.authHandleError);
+router.route('/register').post(auth_1.authRegister, auth_1.authHandleError);
+router.route('/isUnameAvail').post(auth_1.authCheckUname, auth_1.authHandleError);
+router.route('/isEmailAvail').post(auth_1.authCheckEmail, auth_1.authHandleError);
+module.exports = router;
